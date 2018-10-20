@@ -243,7 +243,10 @@
                                  console.log("inside4");
                                      var marker = new google.maps.Marker({
                                       position: new google.maps.LatLng(getcrimequotient[j].longi,getcrimequotient[j].lati),
-                                      map: map
+                                      map: map,
+                                      title:"Very dangerous",
+                                      icon:{
+  url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"                           }
                                       //map:this
                                   });
                                 //  marker.setMap(map);
@@ -256,25 +259,45 @@
                                      console.log("inside3");
                                    var marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(getcrimequotient[j].longi,getcrimequotient[j].lati),
-                                    map: map
+                                    map: map,
+                                    title:"dangerous",
+                                    icon:{
+url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png"                           }
+                                    //map:this
+
                                   }); }
                                  else if(getcrimequotient[j].properties.mag==2){
                                    crimequo[p]+=2;
                                    console.log("inside2");
                                    var marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(getcrimequotient[j].longi,getcrimequotient[j].lati),
-                                    map: map
+                                    map: map,
+                                    title:"crime-prone",
+                                    icon:{
+url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"                           }
+                                    //map:this
+
                                   }); }
                                   else if(getcrimequotient[j].properties.mag==1){
                                     crimequo[p]+=1;
                                    var marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(getcrimequotient[j].longi,getcrimequotient[j].lati),
-                                    map: map
+                                    map: map,
+                                    title:"safe",
+                                    icon:{
+url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"                           }
+                                    //map:this
+
                                   }); }
                                   else if(getcrimequotient[j].properties.mag==0){
                                    var marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(getcrimequotient[j].longi,getcrimequotient[j].lati),
-                                    map: map
+                                    map: map,
+                                    title:"Very safe",
+                                    icon:{
+url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                           }
+                                    //map:this
+
                                   }); }
 
                   }
