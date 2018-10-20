@@ -5,16 +5,21 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class LocationListnerService extends Service
@@ -23,6 +28,179 @@ public class LocationListnerService extends Service
     private Context context = this;
     private static final String TAG = "BOOMBOOMTESTGPS";
     private LocationManager mLocationManager = null;
+    private SmsManager mMessageManager;
+    private int TIME_INTERVAL=2000;
+    private boolean hasSendLocation = false;
+
+
+    private JSONObject jsonObject;
+
+
+    private class LocationListener implements android.location.LocationListener
+    {
+        Location mLastLocation;
+
+        public LocationListener(String provider)
+        {
+            Log.d(TAG, "LocationListener " + provider);
+            mLastLocation = new Location(provider);
+        }
+
+        @Override
+        public void onLocationChanged(Location location)
+        {
+            Log.d(TAG, "onLocationChanged: " + location);
+            mLastLocation.set(location);
+            int dangerLvl = -1;
+
+            try {
+                dangerLvl = checkThreatLevelDanger(location);
+            } catch (JSONException e) {
+                Log.e(TAG,"jason error 2");
+                e.printStackTrace();
+            }
+
+            Intent notificationIntent = new Intent(context, MainActivity.class);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    notificationIntent, 0);
+
+            Notification notification = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle("My Awesome App")
+                    .setContentText("Threat Level: " + dangerLvl)
+                    .setContentIntent(pendingIntent).build();
+
+            startForeground(1337, notification);
+            if(!hasSendLocation){
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                ArrayList<String> arrayList = new ArrayList<>(sharedPreferences.getStringSet("CONTACTS",null));
+                if(arrayList==null){
+                    return;
+                }
+                for (int i = 0; i < arrayList.size(); i++) {
+                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+location.getLatitude()+"Longitude: "+location.getLongitude(), null, null);
+                }
+                hasSendLocation = true;
+            }
+        }
+
+        @Override
+        public void onProviderDisabled(String provider)
+        {
+            Log.d(TAG, "onProviderDisabled: " + provider);
+        }
+
+        @Override
+        public void onProviderEnabled(String provider)
+        {
+            Log.d(TAG, "onProviderEnabled: " + provider);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
+            Log.d(TAG, "onStatusChanged: " + provider);
+        }
+    }
+
+    LocationListener[] locationListeners = {new LocationListener(LocationManager.GPS_PROVIDER),new LocationListener(LocationManager.NETWORK_PROVIDER)};
+
+    @Override
+    public IBinder onBind(Intent arg0)
+    {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        Log.d(TAG, "onStartCommand");
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
+    @Override
+    public void onCreate()
+    {
+
+        mMessageManager = SmsManager.getDefault();
+
+        try {
+            jsonObject = new JSONObject(jasonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG,"-----SERVICE STARTED------");
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Protecting...")
+                .setContentText("Getting Loc")
+                .setContentIntent(pendingIntent).build();
+
+        startForeground(1337, notification);
+        initializeLocationManager();
+
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 2000, 0,
+                    locationListeners[1]);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+        }
+
+        try {
+            mLocationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 2000, 0,
+                    locationListeners[0]);
+        } catch (java.lang.SecurityException ex) {
+            Log.i(TAG, "fail to request location update, ignore", ex);
+        } catch (IllegalArgumentException ex) {
+            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        Log.e(TAG, "onDestroy");
+        super.onDestroy();
+        if (mLocationManager != null) {
+            mLocationManager.removeUpdates(locationListeners[0]);
+            mLocationManager.removeUpdates(locationListeners[1]);
+        }
+    }
+
+    private void initializeLocationManager() {
+        Log.e(TAG, "initializeLocationManager");
+        if (mLocationManager == null) {
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        }
+    }
+
+    public int checkThreatLevelDanger(Location location) throws JSONException {
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
+        JSONObject locationCluster;
+        double latitude,longitude,currLatitude = Math.round(location.getLatitude() * 100.0) / 100.0,currLongitude = Math.round(location.getLongitude() * 100.0) / 100.0;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            locationCluster = jsonArray.getJSONObject(i);
+            longitude = Math.round(locationCluster.getDouble("lati") * 100.0) / 100.0;
+            latitude = Math.round(locationCluster.getDouble("longi") * 100.0) / 100.0;
+            Log.d(TAG,"reading location"+latitude+" "+longitude);
+            if(latitude == currLatitude && longitude == currLongitude){
+                return locationCluster.getJSONObject("properties").getInt("mag");
+            }
+        }
+        return 0;
+    }
+
     private String jasonString = "{\"data\": [{\n" +
             "\"lati\": 77.249200000000002,\n" +
             "\"type\": \"Feature\",\n" +
@@ -1186,147 +1364,4 @@ public class LocationListnerService extends Service
             "},\n" +
             "\"longi\": 28.702200000000001\n" +
             "}]}";
-
-    private JSONObject jsonObject = new JSONObject(jasonString);
-
-    public LocationListnerService() throws JSONException {
-
-    }
-
-    private class LocationListener implements android.location.LocationListener
-    {
-        Location mLastLocation;
-
-        public LocationListener(String provider)
-        {
-            Log.d(TAG, "LocationListener " + provider);
-            mLastLocation = new Location(provider);
-        }
-
-        @Override
-        public void onLocationChanged(Location location)
-        {
-            Log.d(TAG, "onLocationChanged: " + location);
-            mLastLocation.set(location);
-            int dangerLvl = -1;
-
-            try {
-                dangerLvl = checkThreatLevelDanger(location);
-            } catch (JSONException e) {
-                Log.e(TAG,"jason error 2");
-                e.printStackTrace();
-            }
-
-            Intent notificationIntent = new Intent(context, MainActivity.class);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                    notificationIntent, 0);
-
-            Notification notification = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("My Awesome App")
-                    .setContentText("Threat Level: " + dangerLvl)
-                    .setContentIntent(pendingIntent).build();
-
-            startForeground(1337, notification);
-            if(dangerLvl>2){
-
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider)
-        {
-            Log.d(TAG, "onProviderDisabled: " + provider);
-        }
-
-        @Override
-        public void onProviderEnabled(String provider)
-        {
-            Log.d(TAG, "onProviderEnabled: " + provider);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
-            Log.d(TAG, "onStatusChanged: " + provider);
-        }
-    }
-
-    LocationListener locationListener = new LocationListener(LocationManager.GPS_PROVIDER);
-
-    @Override
-    public IBinder onBind(Intent arg0)
-    {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
-        Log.d(TAG, "onStartCommand");
-        super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
-    }
-
-    @Override
-    public void onCreate()
-    {
-        Log.d(TAG,"-----SERVICE STARTED------");
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
-
-        Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Protecting...")
-                .setContentText("Getting Loc")
-                .setContentIntent(pendingIntent).build();
-
-        startForeground(1337, notification);
-        initializeLocationManager();
-        try {
-            mLocationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 2000, 0,
-                    locationListener);
-        } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
-        }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Log.e(TAG, "onDestroy");
-        super.onDestroy();
-        if (mLocationManager != null) {
-            mLocationManager.removeUpdates(locationListener);
-        }
-    }
-
-    private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager");
-        if (mLocationManager == null) {
-            mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        }
-    }
-
-    public int checkThreatLevelDanger(Location location) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
-        JSONObject locationCluster;
-        double latitude,longitude,currLatitude = Math.round(location.getLatitude() * 100.0) / 100.0,currLongitude = Math.round(location.getLongitude() * 100.0) / 100.0;
-        for (int i = 0; i < jsonArray.length(); i++) {
-            locationCluster = jsonArray.getJSONObject(i);
-            longitude = Math.round(locationCluster.getDouble("lati") * 100.0) / 100.0;
-            latitude = Math.round(locationCluster.getDouble("longi") * 100.0) / 100.0;
-            Log.d(TAG,"reading location"+latitude+" "+longitude);
-            if(latitude == currLatitude && longitude == currLongitude){
-                return locationCluster.getJSONObject("properties").getInt("mag");
-            }
-        }
-        return 0;
-    }
 }
