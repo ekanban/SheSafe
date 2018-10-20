@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Autocomplete and Directions</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #origin-input,
+      #destination-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 200px;
+      }
+
+      #origin-input:focus,
+      #destination-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #mode-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        margin-left: 12px;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #mode-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+    </style>
+  </head>
+  <body>
+    <input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location">
+
+    <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location">
+
+    <div id="mode-selector" class="controls">
+      <input type="radio" name="type" id="changemode-walking" checked="checked">
+      <label for="changemode-walking">Walking</label>
+
+      <input type="radio" name="type" id="changemode-transit">
+      <label for="changemode-transit">Transit</label>
+
+      <input type="radio" name="type" id="changemode-driving">
+      <label for="changemode-driving">Driving</label>
+    </div>
+
+    <div id="map"></div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABMkDuCZWjXfTnfj4i0bztODYT0SWRwEY&libraries=places"
+        ></script>
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+    <script>
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+    var getcrimequotient=  [{'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CHITRANJAN PARK'}, 'latitude': 77.2492, 'longitude': 28.5363}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'DABRI'}, 'latitude': 77.086, 'longitude': 28.6127}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'MALVIYA NAGAR'}, 'latitude': 77.2042, 'longitude': 28.5299}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CHANDNI MAHAL'}, 'latitude': 77.2361, 'longitude': 28.6436}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MODEL TOWN'}, 'latitude': 77.1937, 'longitude': 28.7026}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ANANDVIHAR'}, 'latitude': 77.2937, 'longitude': 28.6534}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'KASHMERE GATE'}, 'latitude': 77.2262, 'longitude': 28.6664}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'GOVIND PURI'}, 'latitude': 77.2653, 'longitude': 28.5307}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BINDAPUR'}, 'latitude': 77.0662, 'longitude': 28.6091}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'NEW FRIENDS COLONY'}, 'latitude': 77.2676, 'longitude': 28.5623}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SARITA VIHAR'}, 'latitude': 77.3062, 'longitude': 28.523}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'TIMARPUR'}, 'latitude': 77.2242, 'longitude': 28.7072}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KANJHAWALA'}, 'latitude': 77.0036, 'longitude': 28.7258}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ANAND PARBAT'}, 'latitude': 77.1738, 'longitude': 28.66}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAGARPUR'}, 'latitude': 77.0864, 'longitude': 28.5914}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'PRASHANT VIHAR'}, 'latitude': 77.1276, 'longitude': 28.7179}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'SOUTH CAMPUS'}, 'latitude': 77.179, 'longitude': 28.5705}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ROHINI SOUTH'}, 'latitude': 77.1159, 'longitude': 28.7024}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'PUNJABI BAGH'}, 'latitude': 77.1328, 'longitude': 28.6744}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'DWARKA NORTH'}, 'latitude': 77.0156, 'longitude': 28.6037}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BURARI'}, 'latitude': 77.1974, 'longitude': 28.7366}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'JAMA MASJID'}, 'latitude': 77.2336, 'longitude': 28.6528}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'ADRASH NAGAR'}, 'latitude': 77.1753, 'longitude': 28.7098}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CHANAKYAPURI'}, 'latitude': 77.1961, 'longitude': 28.6034}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'PANDAV NAGAR'}, 'latitude': 77.3026, 'longitude': 28.6204}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MIANWALI NAGAR'}, 'latitude': 77.0888, 'longitude': 28.6796}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'FATEHPUR BERI'}, 'latitude': 77.1511, 'longitude': 28.4655}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'NABI KARIM'}, 'latitude': 77.2175, 'longitude': 28.6498}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'RAJOURI GARDEN'}, 'latitude': 77.1199, 'longitude': 28.6397}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'JAHANGIR PURI'}, 'latitude': 77.1749, 'longitude': 28.7336}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KAMLA MARKET'}, 'latitude': 77.2262, 'longitude': 28.643}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'BARAKHAMBA ROAD'}, 'latitude': 77.225, 'longitude': 28.6309}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAFDARJUNG ENCLAVE'}, 'latitude': 77.2049, 'longitude': 28.5693}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MUKHERJI NAGAR'}, 'latitude': 77.2086, 'longitude': 28.7002}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'FARASH BAZAR'}, 'latitude': 77.2922, 'longitude': 28.6688}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KALKAJI'}, 'latitude': 77.2574, 'longitude': 28.5332}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KALKAJI'}, 'latitude': 77.2564, 'longitude': 28.5473}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PARSHAD NAGAR'}, 'latitude': 77.1805, 'longitude': 28.6478}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'LODHI COLONY'}, 'latitude': 77.2405, 'longitude': 28.5874}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'INDERPURI'}, 'latitude': 77.145, 'longitude': 28.6308}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'OKHLA'}, 'latitude': 77.2746, 'longitude': 28.5268}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAMAYPURBADLI'}, 'latitude': 77.1422, 'longitude': 28.7252}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'JAFFARPUR KALAN'}, 'latitude': 76.9156, 'longitude': 28.5957}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MAYA PURI'}, 'latitude': 77.1208, 'longitude': 28.6266}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'AMAN VIHAR'}, 'latitude': 77.0608, 'longitude': 28.7096}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'VIJAY VIHAR'}, 'latitude': 77.1019, 'longitude': 28.71}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'AMAR COLONY'}, 'latitude': 77.2409, 'longitude': 28.5591}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ALIPUR'}, 'latitude': 77.1391, 'longitude': 28.799}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MAHENDRA PARK'}, 'latitude': 77.1642, 'longitude': 28.7258}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'VASANT KUNJ SOUTH'}, 'latitude': 77.1524, 'longitude': 28.5349}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BHALSWA DAIRY'}, 'latitude': 77.1657, 'longitude': 28.7429}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'BAWANA'}, 'latitude': 77.0425, 'longitude': 28.7965}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'BEGUM PUR'}, 'latitude': 77.0518, 'longitude': 28.7245}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'NARAINA'}, 'latitude': 77.1378, 'longitude': 28.6336}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'NEB SARAI'}, 'latitude': 77.2143, 'longitude': 28.4989}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'RAJINDER NAGAR'}, 'latitude': 77.1828, 'longitude': 28.635}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'SHALIMAR BAGH'}, 'latitude': 77.1571, 'longitude': 28.7168}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'KESHAV PURAM'}, 'latitude': 77.1598, 'longitude': 28.6842}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'RANI BAGH'}, 'latitude': 77.1193, 'longitude': 28.6978}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'BARA HINDU RAO'}, 'latitude': 77.2085, 'longitude': 28.6654}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CONNAUGHT PLACE'}, 'latitude': 77.2143, 'longitude': 28.63}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'H. N. DIN'}, 'latitude': 77.2442, 'longitude': 28.5924}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'DARYA GANJ'}, 'latitude': 77.2406, 'longitude': 28.6419}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'MANGOLPURI'}, 'latitude': 77.0916, 'longitude': 28.6966}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'VIVEKVIHAR'}, 'latitude': 77.3066, 'longitude': 28.6668}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'LAHORI GATE'}, 'latitude': 77.2188, 'longitude': 28.6556}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'SULTAN PURI'}, 'latitude': 77.0786, 'longitude': 28.7026}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'GEETA COLONY'}, 'latitude': 77.2764, 'longitude': 28.6554}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CIVIL LINES'}, 'latitude': 77.2215, 'longitude': 28.6885}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ASHOK VIHAR'}, 'latitude': 77.1743, 'longitude': 28.6924}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'TILAK NAGAR'}, 'latitude': 77.1014, 'longitude': 28.639}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PALAM VILLAGE'}, 'latitude': 77.0829, 'longitude': 28.5881}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'MOTI NAGAR'}, 'latitude': 77.1466, 'longitude': 28.6601}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'HARI NAGAR'}, 'latitude': 77.0995, 'longitude': 28.6094}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'PAHARGANJ'}, 'latitude': 77.2093, 'longitude': 28.6458}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SADAR BAZAR'}, 'latitude': 77.2112, 'longitude': 28.654}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAROJINI NAGAR'}, 'latitude': 77.1991, 'longitude': 28.5745}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'NAJAFGARH'}, 'latitude': 76.9827, 'longitude': 28.6098}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KAPASHERA'}, 'latitude': 77.0872, 'longitude': 28.5296}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'KALYANPURI'}, 'latitude': 77.3171, 'longitude': 28.6136}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BADAR PUR'}, 'latitude': 77.3036, 'longitude': 28.4938}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'SUBHASH PLACE'}, 'latitude': 77.1441, 'longitude': 28.689}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'SUBZIMANDI'}, 'latitude': 77.2077, 'longitude': 28.6692}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MAURICE NAGAR'}, 'latitude': 77.2065, 'longitude': 28.6925}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'MANDIR MARG'}, 'latitude': 77.2032, 'longitude': 28.6386}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'TUGLAK ROAD'}, 'latitude': 77.2112, 'longitude': 28.5983}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'LAJPAT NAGAR'}, 'latitude': 77.2405, 'longitude': 28.5684}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'KRISHNA NAGAR'}, 'latitude': 77.2807, 'longitude': 28.667}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'PRASHANT VIHAR'}, 'latitude': 77.2337, 'longitude': 28.6042}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ANANDVIHAR'}, 'latitude': 77.3131, 'longitude': 28.656}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'SWARUP NAGAR'}, 'latitude': 77.1562, 'longitude': 28.7584}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'GREATER KAILASH'}, 'latitude': 77.2328, 'longitude': 28.5541}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'VIKAS PURI'}, 'latitude': 77.0683, 'longitude': 28.63}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'UTTAM NAGAR'}, 'latitude': 77.0649, 'longitude': 28.625}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'DEFENCE COLONY'}, 'latitude': 77.2334, 'longitude': 28.5647}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'JAMIA NAGAR'}, 'latitude': 77.2924, 'longitude': 28.5621}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'KASHMERE GATE'}, 'latitude': 77.2315, 'longitude': 28.6625}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PULPRAHLAD PUR'}, 'latitude': 77.291, 'longitude': 28.5016}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SARITA VIHAR'}, 'latitude': 77.282, 'longitude': 28.5405}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'NANGLOI'}, 'latitude': 77.067, 'longitude': 28.682}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAFDARJUNG ENCLAVE'}, 'latitude': 77.1986, 'longitude': 28.5585}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'HAUZQAZI'}, 'latitude': 77.2255, 'longitude': 28.6434}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'DWARKA SOUTH'}, 'latitude': 77.0667, 'longitude': 28.5784}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PASCHIM VIHAR'}, 'latitude': 77.1012, 'longitude': 28.6711}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BINDAPUR'}, 'latitude': 77.0674, 'longitude': 28.6205}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'TILAK MARG'}, 'latitude': 77.2354, 'longitude': 28.6182}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'RAJOURI GARDEN'}, 'latitude': 77.1196, 'longitude': 28.6515}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SANGAM VIHAR'}, 'latitude': 77.243, 'longitude': 28.5096}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'MAYURVIHAR'}, 'latitude': 77.3037, 'longitude': 28.6073}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SHAHBAD DAIRY'}, 'latitude': 77.0789, 'longitude': 28.7477}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'GANDHI NAGAR'}, 'latitude': 77.2673, 'longitude': 28.6596}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'DWARKA SEC-23'}, 'latitude': 77.0585, 'longitude': 28.5641}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'RANJIT NAGAR'}, 'latitude': 77.1587, 'longitude': 28.6475}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'RANHOLA'}, 'latitude': 77.036, 'longitude': 28.6538}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SAKET'}, 'latitude': 77.2272, 'longitude': 28.5288}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SHAKARPUR'}, 'latitude': 77.2703, 'longitude': 28.6378}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PREETVIHAR'}, 'latitude': 77.2953, 'longitude': 28.6385}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'KIRTI NAGAR'}, 'latitude': 77.1351, 'longitude': 28.6405}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'HAUZ KHAS'}, 'latitude': 77.2085, 'longitude': 28.5494}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'BAWANA'}, 'latitude': 77.0228, 'longitude': 28.8066}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KN KATJU MARG'}, 'latitude': 77.121, 'longitude': 28.7304}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'I.P. ESTATE'}, 'latitude': 77.2472, 'longitude': 28.6274}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'KOTALA MUBARAK PUR'}, 'latitude': 77.2251, 'longitude': 28.5759}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'DELHI CANTT'}, 'latitude': 77.1244, 'longitude': 28.5987}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'D.B.G ROAD'}, 'latitude': 77.1933, 'longitude': 28.6526}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'KHYALA'}, 'latitude': 77.1133, 'longitude': 28.6576}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'JAGATPURI'}, 'latitude': 77.2839, 'longitude': 28.6436}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'PATEL NAGAR'}, 'latitude': 77.1582, 'longitude': 28.6524}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'VASANT VIHAR'}, 'latitude': 77.1693, 'longitude': 28.558}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'KAROL BAGH'}, 'latitude': 77.1932, 'longitude': 28.6526}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'SUNLIGHT COLONY'}, 'latitude': 77.2602, 'longitude': 28.5784}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'NARELA'}, 'latitude': 77.0885, 'longitude': 28.8532}, {'type': 'Feature', 'properties': {'mag': 4, 'placename': 'NEW ASHOK NAGAR'}, 'latitude': 77.3118, 'longitude': 28.5982}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'PARLIAMENT STREET'}, 'latitude': 77.2137, 'longitude': 28.6247}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'NIHAL VIHAR'}, 'latitude': 77.0717, 'longitude': 28.665}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MADHUVIHAR'}, 'latitude': 77.3061, 'longitude': 28.6254}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BHARAT NAGAR'}, 'latitude': 77.1785, 'longitude': 28.6806}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MANDAWALI'}, 'latitude': 77.3061, 'longitude': 28.6254}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'BABA HARI DAS NAGAR'}, 'latitude': 76.9668, 'longitude': 28.6287}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'CHHAWLA'}, 'latitude': 76.9947, 'longitude': 28.5869}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MEHRAULI'}, 'latitude': 77.1802, 'longitude': 28.5215}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'MAURYA ENCLAVE'}, 'latitude': 77.146, 'longitude': 28.7004}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'JANAK PURI'}, 'latitude': 77.0819, 'longitude': 28.6286}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SARAI ROHILLA'}, 'latitude': 77.1837, 'longitude': 28.6684}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'GULABIBAGH'}, 'latitude': 77.1926, 'longitude': 28.67}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'ROOP NAGAR'}, 'latitude': 77.2026, 'longitude': 28.685}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'VASANT KUNJ NORTH'}, 'latitude': 77.1523, 'longitude': 28.5349}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'ROHINI NORTH'}, 'latitude': 77.1182, 'longitude': 28.7089}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'GHAZIPUR'}, 'latitude': 77.3327, 'longitude': 28.6249}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'SEEMAPURI'}, 'latitude': 77.3165, 'longitude': 28.6781}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'SEELAMPUR'}, 'latitude': 77.2686, 'longitude': 28.6743}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'MANSAROVAR PARK'}, 'latitude': 77.2986, 'longitude': 28.6828}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'SHAHDARA'}, 'latitude': 77.2852, 'longitude': 28.6742}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'KHAJURIKHAS'}, 'latitude': 77.2561, 'longitude': 28.7111}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'JYOTI NAGAR'}, 'latitude': 77.2917, 'longitude': 28.6961}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'HARSH VIHAR'}, 'latitude': 77.3185, 'longitude': 28.706}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'MUNDKA'}, 'latitude': 76.9608, 'longitude': 28.6704}, {'type': 'Feature', 'properties': {'mag': 3, 'placename': 'BHAJANPURI'}, 'latitude': 77.2644, 'longitude': 28.7013}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'ZAFRABAD'}, 'latitude': 77.273, 'longitude': 28.6791}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'WELCOME'}, 'latitude': 77.2748, 'longitude': 28.6734}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'NANDNAGARI'}, 'latitude': 77.3082, 'longitude': 28.6985}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'G.T.B. ENCLAVE'}, 'latitude': 77.316, 'longitude': 28.685}, {'type': 'Feature', 'properties': {'mag': 0, 'placename': 'NEW USMANPUR'}, 'latitude': 77.2621, 'longitude': 28.672}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'SONIA VIHAR'}, 'latitude': 77.2561, 'longitude': 28.7113}, {'type': 'Feature', 'properties': {'mag': 2, 'placename': 'KARAWAL NAGAR'}, 'latitude': 77.2745, 'longitude': 28.7328}, {'type': 'Feature', 'properties': {'mag': 1, 'placename': 'GOKULPURI'}, 'latitude': 77.2808, 'longitude': 28.7022}]
+
+      var map;
+      var directionsDisplay;
+        var directionsService;
+        $(document).ready(function(){
+          navigator.geolocation.getCurrentPosition(initMap);
+        });
+      function initMap(location) {
+        directionsService = new google.maps.DirectionsService();
+         directionsDisplay = new google.maps.DirectionsRenderer();
+         var yourpos = new google.maps.LatLng(location.coords.latitude,location.coords.longitude);
+       map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeControl: false,
+          center: yourpos ,
+          zoom: 13
+        });
+        var marker = new google.maps.Marker({
+          position: yourpos,
+          map: map
+        });
+
+
+         directionsDisplay.setMap(map);
+        new AutocompleteDirectionsHandler(map);
+      }
+
+       /**
+        * @constructor
+       */
+      function AutocompleteDirectionsHandler(map) {
+        this.map = map;
+        this.originPlaceId = null;
+        this.destinationPlaceId = null;
+        this.travelMode = 'WALKING';
+        var originInput = document.getElementById('origin-input');
+        var destinationInput = document.getElementById('destination-input');
+        var modeSelector = document.getElementById('mode-selector');
+        this.directionsService = new google.maps.DirectionsService;
+        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay.setMap(map);
+
+        var originAutocomplete = new google.maps.places.Autocomplete(
+            originInput, {placeIdOnly: true});
+        var destinationAutocomplete = new google.maps.places.Autocomplete(
+            destinationInput, {placeIdOnly: true});
+
+        this.setupClickListener('changemode-walking', 'WALKING');
+        this.setupClickListener('changemode-transit', 'TRANSIT');
+        this.setupClickListener('changemode-driving', 'DRIVING');
+
+        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+        this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+      }
+
+      // Sets a listener on a radio button to change the filter type on Places
+      // Autocomplete.
+      AutocompleteDirectionsHandler.prototype.setupClickListener = function(id, mode) {
+        var radioButton = document.getElementById(id);
+        var me = this;
+        radioButton.addEventListener('click', function() {
+          me.travelMode = mode;
+          me.route();
+        });
+      };
+
+      AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
+        var me = this;
+        autocomplete.bindTo('bounds', this.map);
+        autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          if (!place.place_id) {
+            window.alert("Please select an option from the dropdown list.");
+            return;
+          }
+          if (mode === 'ORIG') {
+            me.originPlaceId = place.place_id;
+          } else {
+            me.destinationPlaceId = place.place_id;
+          }
+          me.route();
+        });
+
+      };
+
+      AutocompleteDirectionsHandler.prototype.route = function() {
+        if (!this.originPlaceId || !this.destinationPlaceId) {
+          return;
+        }
+        var me = this;
+        colors=["red","blue","black","green","yellow"];
+        this.directionsService.route({
+          origin: {'placeId': this.originPlaceId},
+          destination: {'placeId': this.destinationPlaceId},
+          travelMode: this.travelMode,
+          provideRouteAlternatives: true,
+          unitSystem: google.maps.UnitSystem.METRIC
+        }, function(response, status) {
+          alert(status);
+          if (status == google.maps.DirectionsStatus.OK) {
+            for (var p = 0, len = response.routes.length; p < len; i++) {
+              //console.log(response.routes);
+              var waypoints= response.routes[p].overview_path;
+                new google.maps.DirectionsRenderer({
+                  map: map,
+                  directions: response,
+                  routeIndex: p,
+                   unitSystem: google.maps.UnitSystem.METRIC,
+                  provideRouteAlternatives: true,
+                    polylineOptions: {
+                  strokeColor: colors[p],
+                  strokeOpacity: 0.9,
+                  strokeWeight: 10}
+                });
+
+                for(var i=0;i<waypoints.length;i++)
+                { for(var j=0;j<getcrimequotient.length;j++)
+                  {
+                    var roundofflat=getcrimequotient[j].latitude.toString().slice(0,(getcrimequotient[j].latitude.toString().indexOf("."))+2);
+                    var roundofflong=getcrimequotient[j].longitude.toString().slice(0,(getcrimequotient[j].longitude.toString().indexOf("."))+2);
+                    var roundoff2lat=waypoints[i].lat().toString().slice(0,(waypoints[i].lat().toString().indexOf("."))+2);
+                    var roundoff2long=waypoints[i].lng().toString().slice(0,(waypoints[i].lng().toString().indexOf("."))+2);
+                        //console.log(roundofflat);
+                    if((roundofflat==roundoff2lat) && (roundoff2long==roundofflong))
+                    {
+                      /*var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(getcrimequotient[j].longitude,getcrimequotient[j].latitude),
+    map: map,
+    title: getcrimequotient[j].properties.placename,
+
+  });*/
+                    }
+                  }
+
+                }
+
+
+            }
+        } else {
+
+            window.alert('Directions request failed due to ' + status);
+        }
+        });
+      };
+      $(document).ready(function(){
+        navigator.geolocation.getCurrentPosition(initMap);
+      });
+    </script>
+
+  </body>
+</html>
