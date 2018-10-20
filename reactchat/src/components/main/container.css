@@ -1,0 +1,529 @@
+
+
+.main {
+    padding-top: 162px
+}
+
+.main .main__head {
+    padding: 0 15px;
+    margin: 0 auto 92px;
+    text-align: center
+}
+
+.main .main__title {
+    max-width: 950px;
+    margin: 0 auto 50px
+}
+
+.main .main__head-entry {
+    max-width: 950px;
+    margin: 0 auto 46px;
+    font-size: 25px
+}
+
+.main .main__head--gutters-large {
+    padding-top: 24px;
+    margin-bottom: 43px
+}
+
+.main .main__head--gutters-large .main__title {
+    margin-bottom: 19px
+}
+
+@media (max-width: 1439px) {
+    .main {
+        padding-top: 130px
+    }
+    .main .main__head {
+        position: relative;
+        margin-bottom: 60px
+    }
+    .main .main__title {
+        margin-bottom: 30px;
+        margin-top: -20px
+    }
+    .main .main__head-entry {
+        max-width: 950px;
+        margin: 0 auto 20px;
+        font-size: 25px
+    }
+    .main .main__head--gutters-large {
+        padding-top: 0px;
+        margin-bottom: 30px
+    }
+    .main .main__head--gutters-large .main__title {
+        margin-bottom: 5px
+    }
+}
+
+@media (max-width: 1023px) {
+    .main {
+        padding-top: 60px
+    }
+    .main .main__head {
+        margin: 50px auto
+    }
+    .main .main__head-entry {
+        margin: 0 50px 46px
+    }
+}
+
+@media (max-width: 767px) {
+    .main .main__head-entry {
+        margin: 0 0 40px;
+        font-size: 20px
+    }
+}
+
+
+
+.intro_treatments {
+    position: relative;
+    margin-bottom: 174px
+}
+
+.intro_treatments:before {
+    content: '';
+    position: absolute;
+    top: -5.2%;
+    right: -.5%;
+    z-index: -1;
+    width: 423px;
+    height: 398px;
+    background: url(/website/image-blob-1.png) 0 0 no-repeat;
+    animation: blobfloater3 infinite 25s ease-in-out
+}
+
+.intro_treatments:after {
+    content: '';
+    position: absolute;
+    bottom: -16.3%;
+    left: -.5%;
+    z-index: -1;
+    width: 460px;
+    height: 362px;
+    background: url(/website/image-blob-2.png) 0 0 no-repeat;
+    animation: blobfloater2 infinite 35s ease-in-out
+}
+
+.intro_treatments .intro_treatments__outer {
+    display: flex;
+    width: 100%;
+    background: #f3f3f3
+}
+
+.intro_treatments .intro_treatments__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 883px;
+    background: #f3f3f3
+}
+
+.intro_treatments .intro_treatments__image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 57%;
+    right: 0;
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #f3f3f3
+}
+
+.intro_treatments .intro_treatments__content {
+    position: relative;
+    z-index: 2;
+    max-width: 440px;
+    margin: 0 auto 20px 150px
+}
+
+.intro_treatments .intro_treatments__entry {
+    margin: 41px 0 43px
+}
+
+.intro_treatments .intro_treatments__title {
+    font-size: 65px;
+    color: white
+}
+
+.intro_treatments--transparent {
+    margin-bottom: 193px
+}
+
+.intro_treatments--transparent:before {
+    top: 1.6%;
+    right: -.5%
+}
+
+.intro_treatments--transparent:after {
+    bottom: -44.3%;
+    left: -.5%
+}
+
+.intro_treatments--transparent .intro_treatments__outer {
+    background: transparent
+}
+
+.intro_treatments--transparent .intro_treatments__inner {
+    min-height: 774px;
+    background: transparent
+}
+
+.intro_treatments--transparent .intro_treatments__image {
+    margin-left: 20px;
+    background-color: transparent
+}
+
+.intro_treatments--transparent .intro_treatments__content {
+    max-width: 480px;
+    margin: 0 auto 0 33px
+}
+
+.intro_treatments--transparent .intro_treatments__title {
+    margin: 0
+}
+
+.intro_treatments--treatments {
+    margin-bottom: 197px
+}
+
+.intro_treatments--treatments .intro_treatments__inner {
+    min-height: 774px;
+    background: #ea96a6
+}
+
+.intro_treatments--treatments .intro_treatments__outer {
+    background: #ea96a6
+}
+
+.intro_treatments--treatments .intro_treatments__image {
+    background-color: #ea96a6
+}
+
+.section__entry {
+    font-size: 26px
+}
+
+@media only screen and (min-width: 1800px) {
+    .intro_treatments .intro_treatments__image {
+        background-size: auto 100%;
+        left: 51%
+    }
+}
+
+@media (max-width: 1800px) {
+    .intro_treatments {
+        margin-bottom: 110px
+    }
+    .intro_treatments .intro_treatments__inner {
+        min-height: 700px
+    }
+    .intro_treatments .intro_treatments__image {
+        background-size: auto 100%;
+        left: 44%
+    }
+}
+
+@media (max-width: 1439px) {
+    .intro_treatments {
+        margin-bottom: 110px
+    }
+    .intro_treatments .intro_treatments__inner {
+        min-height: 600px
+    }
+    .intro_treatments .intro_treatments__image {
+        background-position: 0 50%;
+        left: 30%
+    }
+    .intro_treatments .intro_treatments__content {
+        width: 50%;
+        max-width: none;
+        padding: 20px 0 20px 60px;
+        margin: 0
+    }
+    .intro_treatments--treatments .intro_treatments__content {
+        width: 100%;
+        max-width: 440px
+    }
+    .intro_treatments .intro_treatments__title {
+        font-size: 50px
+    }
+}
+
+@media (max-width: 1023px) {
+    .intro_treatments {
+        margin-bottom: 67px
+    }
+    .intro_treatments .intro_treatments__outer {
+        justify-content: center;
+        background: transparent
+    }
+    .intro_treatments .intro_treatments__inner {
+        display: block;
+        min-height: auto;
+        background: transparent
+    }
+    .intro_treatments .intro_treatments__image {
+        position: relative;
+        bottom: auto;
+        left: 0;
+        padding-top: 100%;
+        margin: 0 auto 29px;
+        background-position: 80% 50%
+    }
+    .intro_treatments .intro_treatments__image:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 9999px;
+        height: 100%;
+        background: #f2f2f2
+    }
+    .intro_treatments .intro_treatments__image img {
+        width: 100%;
+        max-width: none
+    }
+    .intro_treatments .intro_treatments__content {
+        width: 100%;
+        max-width: 500px;
+        padding: 0;
+        margin: 0 auto;
+        text-align: center
+    }
+    .intro_treatments .intro_treatments__title {
+        margin-bottom: 26px;
+        padding: 0 10px;
+        color: black
+    }
+    .intro_treatments .intro_treatments__entry {
+        margin-bottom: 0
+    }
+    .intro_treatments .intro_treatments__actions {
+        display: none
+    }
+    .intro_treatments--transparent .intro_treatments__image:after {
+        content: none
+    }
+    .intro_treatments--treatments .intro_treatments__image:after {
+        content: none
+    }
+}
+
+.intro {
+    position: relative;
+    margin-bottom: 174px
+}
+
+.intro:before {
+    content: '';
+    position: absolute;
+    top: -5.2%;
+    right: -.5%;
+    z-index: -1;
+    width: 423px;
+    height: 398px;
+    background: url(/website/image-blob-1.png) 0 0 no-repeat;
+    animation: blobfloater3 infinite 25s ease-in-out
+}
+
+.intro:after {
+    content: '';
+    position: absolute;
+    bottom: -16.3%;
+    left: -.5%;
+    z-index: -1;
+    width: 460px;
+    height: 362px;
+    background: url(/website/image-blob-2.png) 0 0 no-repeat;
+    animation: blobfloater2 infinite 35s ease-in-out
+}
+
+.intro .intro__outer {
+    display: flex;
+    width: 100%;
+    background: #f3f3f3
+}
+
+.intro .intro__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 883px;
+    background: #f3f3f3
+}
+
+.intro .intro__image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: #f3f3f3
+}
+
+.intro .intro__content {
+    position: relative;
+    z-index: 2;
+    max-width: 440px;
+    margin: 0 auto 20px 150px
+}
+
+.intro .intro__entry {
+    margin: 41px 0 43px
+}
+
+.intro--transparent {
+    margin-bottom: 193px
+}
+
+.intro--transparent:before {
+    top: 1.6%;
+    right: -.5%
+}
+
+.intro--transparent:after {
+    bottom: -44.3%;
+    left: -.5%
+}
+
+.intro--transparent .intro__outer {
+    background: transparent
+}
+
+.intro--transparent .intro__inner {
+    min-height: 774px;
+    background: transparent
+}
+
+.intro--transparent .intro__image {
+    margin-left: 20px;
+    background-color: transparent
+}
+
+.intro--transparent .intro__content {
+    max-width: 480px;
+    margin: 0 auto 0 33px
+}
+
+.intro--transparent .intro__title {
+    margin: 0
+}
+
+.intro--treatments {
+    margin-bottom: 197px
+}
+
+.intro--treatments .intro__inner {
+    min-height: 774px;
+    background: #b5dbeb
+}
+
+.intro--treatments .intro__outer {
+    background: #b5dbeb
+}
+
+.intro--treatments .intro__image {
+    background-color: #b5dbeb
+}
+
+@media only screen and (min-width: 1800px) {
+    .intro .intro__image {
+        background-size: auto 100%
+    }
+}
+
+@media (min-width: 1440px) and (max-width: 1799px) {
+    .intro .intro__image {
+        background-position: 0 50%
+    }
+}
+
+@media (max-width: 1439px) {
+    .intro {
+        margin-bottom: 110px
+    }
+    .intro .intro__inner {
+        min-height: 600px
+    }
+    .intro .intro__image {
+        background-position: 0 50%
+    }
+    .intro .intro__content {
+        width: 50%;
+        max-width: none;
+        padding: 20px 0 20px 60px;
+        margin: 0
+    }
+    .intro--treatments .intro__content {
+        width: 100%;
+        max-width: 440px
+    }
+}
+
+@media (max-width: 1023px) {
+    .intro {
+        margin-bottom: 67px
+    }
+    .intro .intro__outer {
+        justify-content: center;
+        background: transparent
+    }
+    .intro .intro__inner {
+        display: block;
+        min-height: auto;
+        background: transparent
+    }
+    .intro .intro__image {
+        position: relative;
+        bottom: auto;
+        left: 0;
+        padding-top: 90%;
+        margin: 0 auto 29px
+    }
+    .intro .intro__image:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: 9999px;
+        height: 100%;
+        background: #f2f2f2
+    }
+    .intro .intro__image img {
+        width: 100%;
+        max-width: none
+    }
+    .intro .intro__content {
+        width: 100%;
+        max-width: 500px;
+        padding: 0;
+        margin: 0 auto;
+        text-align: center
+    }
+    .intro .intro__title {
+        margin-bottom: 20px;
+        padding: 0 10px
+    }
+    .intro .intro__entry {
+        margin-bottom: 0;
+        margin: 25px 0 25px
+    }
+    .intro .intro__actions {
+        margin-top: 30px
+    }
+    .intro--transparent .intro__image:after {
+        content: none
+    }
+    .intro--treatments .intro__image:after {
+        content: none
+    }
+}
+
+
+
