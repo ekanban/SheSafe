@@ -2,8 +2,9 @@ import React from 'react';
 import states from './states';
 
 import Login, { PinVerify,PinVerifyNew }  from './Login';
-
-const statesOptions = states.map((i) => ({value: i, label: i, trigger: '100'}))
+import CustomComponent from './linktravel';
+import Custom from './postdata';
+const statesOptions = states.map((i) => ({value: i, label: i, trigger: '11'}))
 const steps = [
     {
       id: '0',
@@ -19,12 +20,20 @@ const steps = [
       id: '2',
 
       options: [
-        { value: 1, label: 'TravelSafe', trigger: '100' },
+        { value: 1, label: 'TravelSafe', trigger: '200' },
         { value: 2, label: "Report misconduct", trigger: '100' },
           { value: 3, label: "Stay informed", trigger: '100' }
       ],
 
     },
+    {
+        id: '200',
+
+        component: (
+        <CustomComponent/>
+      ),
+      end:true,
+      },
 
     {
         id: '100',
@@ -40,9 +49,40 @@ const steps = [
 
       },
       {
+        id: '12',
+
+        options: [
+          { value: 1, label: 'Domestic Violence', trigger: '13' },
+          { value: 2, label: 'Sexual harassement', trigger: '13' },
+          { value: 3, label: 'Rape', trigger: '13' },
+          { value: 4, label: 'Acid throwing', trigger: '13' },
+          { value: 5, label: 'Stalking', trigger: '13' },
+          { value: 6, label: 'Denial Of Medical Care', trigger: '13' },
+          { value: 7, label: 'Dowry', trigger: '13' },
+          { value: 8, label: 'Cyberbullying', trigger: '13' },
+          { value: 9, label: 'Mob Violence', trigger: '13' },
+
+        ],
+
+      },
+
+      {
+        id: '13',
+        message: 'Give a brief description of the crime',
+        trigger: '14'
+
+      },
+      {
+        id: '14',
+      component:<Custom/>,
+        trigger: '14'
+
+      },
+
+      {
         id: '5',
-        message: 'We would like some of your details before you could contact the team',
-        trigger: '7'
+        message: 'We would like some of your details before we could contact the team',
+        trigger: '6'
 
       },
       {
@@ -53,7 +93,7 @@ const steps = [
       {
         id: 'name',
         user: true,
-        trigger: '8',
+        trigger: '7',
       },
       {
         id: '7',
@@ -63,21 +103,10 @@ const steps = [
       {
         id: 'phone',
         user: true,
-       trigger: '100'
+       trigger: '9'
       },
       {
-        id: '8',
-        message: 'What is your gender?',
-        trigger: 'gender',
-      },
-      {
-        id: 'gender',
-        options: [
-          { value: 'male', label: 'Male', trigger: '9' },
-          { value: 'female', label: 'Female', trigger: '9' },
-        ],
-      },
-      {
+
         id: '9',
         message: 'How old are you?',
         trigger: 'age',
@@ -111,6 +140,16 @@ const steps = [
       {
         id: 'state',
         options: statesOptions
+      },
+      {
+          id: '11',
+          trigger: 'email',
+          message: 'Enter your email address.'
+      },
+      {
+        id: 'email',
+        user: true,
+       trigger: '12'
       },
 
     {
