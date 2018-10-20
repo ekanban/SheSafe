@@ -1,6 +1,6 @@
 import React from 'react';
 import './header.css';
-
+import SheSafe from'./shes.jpeg';
 
 export default class Header extends React.Component {
     state = {
@@ -20,7 +20,7 @@ export default class Header extends React.Component {
                     <div className="headerInner">
                         <div className="headerLogo">
                             <a href="/" className="logo">
-                                <img src="" alt="Logo image 4245a2e3582a2c23b2366c15c6c5628ca2e187e86b2176a34e33156f3d1367da" />
+                                <img src={SheSafe} alt="Logo image 4245a2e3582a2c23b2366c15c6c5628ca2e187e86b2176a34e33156f3d1367da" />
 
                                 SheSafe
                 </a>
