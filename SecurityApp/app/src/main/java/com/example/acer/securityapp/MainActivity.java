@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button stopButton;
     private Button sendButton;
     private Context context = this;
-    private LocationListener locationListener;
+
     private Intent intent = null;
     private SmsManager mSmsManager;
 
@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         stopButton = findViewById(R.id.stop);
         sendButton = findViewById(R.id.send);
         mSmsManager = SmsManager.getDefault();
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+        }
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,17 +69,26 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED||-ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.SEND_SMS,Manifest.permission.READ_PHONE_STATE},20);
-                }else {
-                    mSmsManager.sendTextMessage("7905389666", null, "Fuck You", null, null);
-                }
+                mSmsManager.sendTextMessage("7905389666", null, "hello", null, null);
             }
         });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        locationListener = new LocationListener() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},10);
+            return;
+        }
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, getLocationListener());
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,getLocationListener());
+
+    }
+    
+
+    public LocationListener getLocationListener(){
+        return new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 textView.setText(location.getLatitude() + " "+location.getLongitude());
@@ -96,24 +109,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},10);
-            return;
-        }
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case 10:
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            case 20:
-                mSmsManager.sendTextMessage("7905389666",null,"Fuck You",null,null);
-        }
     }
 }
