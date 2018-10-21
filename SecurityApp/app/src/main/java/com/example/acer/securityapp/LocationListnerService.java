@@ -78,7 +78,7 @@ public class LocationListnerService extends Service
                     .setContentIntent(pendingIntent).build();
 
             startForeground(1337, notification);
-            if(!hasSendLocation&&dangerLvl>2){
+            if(!hasSendLocation){
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
                 ArrayList<String> arrayList;
                 try{
@@ -99,7 +99,7 @@ public class LocationListnerService extends Service
                 }
 
                 for (int i = 0; i < arrayList.size(); i++) {
-                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+location.getLatitude()+"Longitude: "+location.getLongitude()+" ,address - "+address.get(0).getLocality()+","+address.get(0).getLocale(), null, null);
+                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+location.getLatitude()+"Longitude: "+location.getLongitude()+" ,address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality(), null, null);
                 }
                 hasSendLocation = true;
             }
