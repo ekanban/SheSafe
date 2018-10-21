@@ -69,6 +69,12 @@ const steps = [
       {
         id: '13',
         message: 'Give a brief description of the crime',
+        trigger: 'crimedes'
+
+      },
+      {
+        id: 'crimedes',
+        user:true,
         trigger: '14'
 
       },
