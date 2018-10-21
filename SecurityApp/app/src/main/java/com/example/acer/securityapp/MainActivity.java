@@ -36,15 +36,13 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
-    private LocationManager locationManager;
     private Button startButton;
-    private Button stopButton;
-    private Button sendButton;
+    private Button locationButton;
+    private Button contactButton;
     private Context context = this;
     private int buttonMode = 0;
 
     private Intent intent = null;
-    private SmsManager mSmsManager;
 
     private static final int PICK_CONTACT=1;
 
@@ -52,15 +50,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.location);
         startButton = findViewById(R.id.start);
-        stopButton = findViewById(R.id.stop);
-        sendButton = findViewById(R.id.send);
-        mSmsManager = SmsManager.getDefault();
+        locationButton = findViewById(R.id.safety_index);
+        contactButton = findViewById(R.id.emergency);
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_CONTACTS}, 101);
+
+        if(savedInstanceState!=null){
+            buttonMode = savedInstanceState.getInt("BUTTON_MODE");
+            if(buttonMode==1){
+                intent = new Intent(context, LocationListnerService.class);
+                startButton.setText("Stop");
+                //startButton.setPadding(85,100,85,100);
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_CONTACTS,Manifest.permission.CALL_PHONE}, 101);
         }
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -71,68 +79,42 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(context, LocationListnerService.class);
                     startService(intent);
                     button.setText("Stop");
+                    buttonMode = 1;
+                    //button.setPadding(270,300,270,300);
                 }else{
                     stopService(intent);
                     intent=null;
                     button.setText("Start");
+                    buttonMode = 0;
+                    //button.setPadding(80,100,80,100);
                 }
             }
         });
 
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(intent!=null){
-                    stopService(intent);
-                    intent=null;
-                }
+                Intent intent = new Intent(context,ThreatDisplayActivity.class);
+                startActivity(intent);
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSmsManager.sendTextMessage(" 7905389666", null, "hello", null, null);
+                Intent intent = new Intent(context,ContactActivity.class);
+                startActivity(intent);
             }
         });
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.INTERNET},10);
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, getLocationListener());
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,getLocationListener());
-
     }
 
 
-    public LocationListener getLocationListener(){
-        return new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                textView.setText(location.getLatitude() + " "+location.getLongitude());
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        };
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("BUTTON_MODE",buttonMode);
     }
 
     @Override public void onActivityResult(int reqCode, int resultCode, Intent data) {

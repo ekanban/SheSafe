@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="4">
 
             <Button
@@ -32,29 +32,31 @@
                 android:layout_centerHorizontal="true"
                 android:translationZ="20dp"/>
         </RelativeLayout>
-        <Button
-            android:id="@+id/sos"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Send Sos"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="vertical">
             <Button
-                android:id="@+id/safety_index"
-                android:text="View My Safety Index"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:id="@+id/sos"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                />
+                android:text="Send Sos"/>
+
+            <Button
+                android:id="@+id/loc_live"
+                android:text="Location Live"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
             <Button
                 android:id="@+id/emergency"
                 android:text="Emergency Numbers"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"/>
+
         </LinearLayout>
     </LinearLayout>
 

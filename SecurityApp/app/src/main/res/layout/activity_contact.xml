@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactActivity"
+    android:orientation="vertical">
+    <TextView
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:text="Standard Emergency Contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/phno1"
+            android:text="112"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <ImageView
+            android:src="@drawable/phone_icon"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+    </LinearLayout>
+    <TextView
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:text="Saved Contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ListView
+        android:id="@+id/saved_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+</LinearLayout>
