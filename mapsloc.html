@@ -4,12 +4,24 @@
   <head>
     <title>Place Autocomplete</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
 
     <meta charset="utf-8">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+       .preloader {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: 9999;
+   background-image: url('littlepin_spinner.gif');
+   background-repeat: no-repeat;
+   background-color: #FFF;
+   background-position: center;
+}
       #map {
         height: 100%;
       }
@@ -64,6 +76,7 @@
     </style>
   </head>
   <body>
+<div class="preloader"></div>
 
     <input id="origin-input" class="controls" type="text"
         placeholder="Enter an origin location">
@@ -165,6 +178,7 @@
         var me = this;
         autocomplete.bindTo('bounds', this.map);
         autocomplete.addListener('place_changed', function() {
+
           var place = autocomplete.getPlace();
           if (!place.place_id) {
             window.alert("Please select an option from the dropdown list.");
@@ -202,6 +216,7 @@
            var crimequo=[];
              for (var p = 0, len = response.routes.length; p < len; p++) {
               crimequo[p]=0;
+              console.log(len);
               var waypoints = response.routes[p].overview_path;
                 //console.log(response.routes);
                new google.maps.DirectionsRenderer({
@@ -301,11 +316,33 @@ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                   
                                   }); }
 
                   }
+
                   }
 
                 }
 
  crimequo[p]/=countofmarkers;
+ var div = document.createElement('div');
+ div.className = "displayrouteinfo"
+ document.body.appendChild(div);
+ var colour = "Color"+p,
+    route = "Route"+p,
+ 	 duration = "Duration"+p,
+ 	 distance = "Distance"+p,
+ 	 crimequo = "Crimequo"+p;
+ div.innerHTML = '<ul class="info list-group"><li id='+route+' class="list-group-item list-group-item-action active"></li><li id='+colour+' class="list-group-item list-group-item-action"></li><li id='+duration+' class="list-group-item list-group-item-action"></li><li id='+distance+' class="list-group-item list-group-item-action"></li><li id='+crimequo+' class="list-group-item list-group-item-danger list-group-item-action"></li></ul>';
+ document.getElementById(route).innerHTML = "Route Number:  " + p ;
+  document.getElementById(colour).innerHTML = " Color " +
+      (colors[p]) ;
+      //console.log(response.routes);
+   document.getElementById(distance).innerHTML = "Distance  : " +
+      (response.routes[p].legs[0].distance.text) ;
+        document.getElementById(duration).innerHTML = "Time duration for reaching : " +
+      response.routes[p].legs[0].duration.text;
+    console.log(response.routes[p].legs[0]);
+   var message = 'Crimequotient :'+ crimequo[p];
+  document.getElementById(crimequo).innerHTML = message;
+  var dis='Route :'+p;
 
 
         };
@@ -314,7 +351,12 @@ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                   
   };
 
 
-
+  $(window).load(function() {
+    setTimeout(function(){
+   //$('.preloader').fadeOut();
+   $('.preloader').delay(150).fadeOut('slow');
+}, 1000);
+  });
 
 
       $(document).ready(function(){
