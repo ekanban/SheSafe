@@ -322,6 +322,7 @@ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                   
                 }
 
  crimequo[p]/=countofmarkers;
+ console.log(crimequo[p]);
  var div = document.createElement('div');
  div.className = "displayrouteinfo"
  document.body.appendChild(div);
@@ -329,8 +330,8 @@ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                   
     route = "Route"+p,
  	 duration = "Duration"+p,
  	 distance = "Distance"+p,
- 	 crimequo = "Crimequo"+p;
- div.innerHTML = '<ul class="info list-group"><li id='+route+' class="list-group-item list-group-item-action active"></li><li id='+colour+' class="list-group-item list-group-item-action"></li><li id='+duration+' class="list-group-item list-group-item-action"></li><li id='+distance+' class="list-group-item list-group-item-action"></li><li id='+crimequo+' class="list-group-item list-group-item-danger list-group-item-action"></li></ul>';
+ 	 crimequot = "Crimequo"+p;
+ div.innerHTML = '<ul class="info list-group"><li id='+route+' class="list-group-item list-group-item-action active"></li><li id='+colour+' class="list-group-item list-group-item-action"></li><li id='+duration+' class="list-group-item list-group-item-action"></li><li id='+distance+' class="list-group-item list-group-item-action"></li><li id='+crimequot+' class="list-group-item list-group-item-danger list-group-item-action"></li></ul>';
  document.getElementById(route).innerHTML = "Route Number:  " + p ;
   document.getElementById(colour).innerHTML = " Color " +
       (colors[p]) ;
@@ -339,13 +340,14 @@ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"                   
       (response.routes[p].legs[0].distance.text) ;
         document.getElementById(duration).innerHTML = "Time duration for reaching : " +
       response.routes[p].legs[0].duration.text;
-    console.log(response.routes[p].legs[0]);
+
    var message = 'Crimequotient :'+ crimequo[p];
-  document.getElementById(crimequo).innerHTML = message;
-  var dis='Route :'+p;
+  document.getElementById(crimequot).innerHTML = message;
+
 
 
         };
+
       ;
     });
   };
