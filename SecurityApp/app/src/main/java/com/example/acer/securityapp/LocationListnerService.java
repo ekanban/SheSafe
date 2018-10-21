@@ -73,7 +73,7 @@ public class LocationListnerService extends Service
 
             Notification notification = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("My Awesome App")
+                    .setContentTitle("Protecting...")
                     .setContentText("Threat Level: " + dangerLvl)
                     .setContentIntent(pendingIntent).build();
 
@@ -99,7 +99,7 @@ public class LocationListnerService extends Service
                 }
 
                 for (int i = 0; i < arrayList.size(); i++) {
-                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+location.getLatitude()+"Longitude: "+location.getLongitude()+" ,address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality(), null, null);
+                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+" "+"http://google.com/maps/bylatlng?lat=" + location.getLatitude() + "&lng=" + location.getLongitude()+"   ,address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality(), null, null);
                 }
                 hasSendLocation = true;
             }

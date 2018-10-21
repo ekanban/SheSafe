@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#307F76</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorOn">#3BBA7C</color>
+    <color name="fullBlack">#000000</color>
+    <color name="lightBlack">#141311</color>
+    <color name="buttonColor">#201F1D</color>
+    <color name="maroon">#A60300</color>
 </resources>

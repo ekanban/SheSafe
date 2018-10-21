@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -45,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
     private Button startButton;
-    private Button locationButton;
-    private Button contactButton;
-    private Button sosButton;
+    private ImageButton locationButton;
+    private ImageButton contactButton;
+    private ImageButton sosButton;
     private Context context = this;
     private int buttonMode = 0;
     private double mlat ,mLong;
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 for (int i = 0; i < arrayList.size(); i++) {
-                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. Latitude: "+mlat+"Longitude: "+mLong+" ,address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality(), null, null);
+                    mMessageManager.sendTextMessage(arrayList.get(i), null, "I am sending my location for precaution for my safety. "+"http://google.com/maps/bylatlng?lat=" + mlat + "&lng=" + mLong+" ,address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality(), null, null); //"http://google.com/maps/bylatlng?lat=" + location.getLatitude() + "&lng=" + location.getLongitude()+",address - "+address.get(0).getLocality()+","+address.get(0).getSubLocality()
                 }
             }
         });

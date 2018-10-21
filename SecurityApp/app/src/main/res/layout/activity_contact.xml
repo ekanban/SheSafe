@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".ContactActivity"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+        <ImageView
+            android:src="@drawable/call_sos"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="2" />
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+    </LinearLayout>
     <TextView
         android:padding="8dp"
         android:textSize="20sp"
