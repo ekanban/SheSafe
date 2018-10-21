@@ -3,11 +3,11 @@ import React from 'react';
 export default class Custom extends React.Component {
     state = {
         name:this.props.steps.name.value,
-        //phone:this.props.steps.phone.value,
-        //email:this.props.steps.email.value,
-        //age:this.props.steps.age.value,
-        //state:this.props.steps.state.value,
-        //crimedes:this.props.steps.crimedes
+        phone:this.props.steps.phone.value,
+        email:this.props.steps.email.value,
+        age:this.props.steps.age.value,
+        state:this.props.steps.state.value,
+        crimedes:this.props.steps.crimedes
     }
     componentWillMount = () => {
 console.log(this.state);
