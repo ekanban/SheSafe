@@ -134,9 +134,9 @@
         this.directionsDisplay.setMap(map);
 
         var originAutocomplete = new google.maps.places.Autocomplete(
-            originInput, {placeIdOnly: true});
+            originInput, {fields: ['place_id']});
         var destinationAutocomplete = new google.maps.places.Autocomplete(
-            destinationInput, {placeIdOnly: true});
+            destinationInput, {fields: ['place_id']});
 
         this.setupClickListener('changemode-walking', 'WALKING');
         this.setupClickListener('changemode-transit', 'TRANSIT');
