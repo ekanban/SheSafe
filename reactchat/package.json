@@ -8,7 +8,7 @@
     "react-images-upload": "^1.1.99",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts": "5.0.1",
     "react-simple-chatbot": "^0.2.10",
     "styled-components": "^3.2.6"
   },
